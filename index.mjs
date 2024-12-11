@@ -55,7 +55,6 @@ function AdjustMSGLink(inputMSG) {
 
     // reconstruct the message
     const NewMSG = tokens.join(" ");
-    console.log(NewMSG);
 
     // return
     resolve(NewMSG);
@@ -68,9 +67,10 @@ async function HandleMSG(msg) {
   if (msg.embeds.length == 0) return;
 
   const NewMSG = await AdjustMSGLink(msg.content);
-
-  await msg.channel.send(`<@${msg.author.id}> SENT:\n` + NewMSG);
-  await msg.delete();
+  if (NewMSG != msg.content) {
+    await msg.channel.send(`<@${msg.author.id}> SENT:\n` + NewMSG);
+    await msg.delete();
+  }
 }
 
 // Event listeners to trigger our bot logic
