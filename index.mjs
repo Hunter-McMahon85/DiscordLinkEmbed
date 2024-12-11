@@ -30,14 +30,13 @@ function AdjustMSGLink(inputMSG) {
   return new Promise((resolve) => {
     // find the link and url in the message Tokenize and search
     let tokens = inputMSG.split(" ");
-    // replace the link with its approprate social media service
 
+    // replace the link with its approprate social media service
     for (let i = 0; i < tokens.length; i++) {
       if (isValidURL(tokens[i])) {
         switch (true) {
           case tokens[i].includes("x.com"):
             tokens[i] = tokens[i].replace("x.com", "fxtwitter.com");
-            console.log("switch trigered");
             break;
           case tokens[i].includes("twitter.com"):
             tokens[i] = tokens[i].replace("twitter.com", "fxtwitter.com");
@@ -57,6 +56,7 @@ function AdjustMSGLink(inputMSG) {
     // reconstruct the message
     const NewMSG = tokens.join(" ");
     console.log(NewMSG);
+
     // return
     resolve(NewMSG);
   });
@@ -76,11 +76,11 @@ async function HandleMSG(msg) {
 // Event listeners to trigger our bot logic
 c.on("messageCreate", async (msg) => {
   // for messages sent with an embded
-  HandleMSG(msg)
+  HandleMSG(msg);
 });
 
 c.on("messageUpdate", async (oldMessage, newMessage) => {
   // for messages sent with an link that embed after send
   // discord secretly "edits" these messages so they show to listeners as an update
-  HandleMSG(newMessage)
+  HandleMSG(newMessage);
 });
