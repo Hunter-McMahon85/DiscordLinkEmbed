@@ -38,7 +38,8 @@ function AdjustMSGLink(inputMSG) {
           case tokens[i].includes("x.com"):
             tokens[i] = tokens[i].replace("x.com", "fxtwitter.com");
             break;
-          case tokens[i].includes("twitter.com") & !tokens[i].includes("xtwitter.com"):
+          case tokens[i].includes("twitter.com") &
+            !tokens[i].includes("xtwitter.com"):
             tokens[i] = tokens[i].replace("twitter.com", "fxtwitter.com");
             break;
           case tokens[i].includes("instagram.com"):
