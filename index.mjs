@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import { Client, GatewayIntentBits } from "discord.js";
+import { Client, GatewayIntentBits, WebhookClient } from "discord.js";
 
 const c = new Client({
   intents: [
@@ -38,7 +38,7 @@ function AdjustMSGLink(inputMSG) {
           case tokens[i].includes("x.com"):
             tokens[i] = tokens[i].replace("x.com", "fxtwitter.com");
             break;
-          case tokens[i].includes("twitter.com"):
+          case tokens[i].includes("twitter.com") & !tokens[i].includes("xtwitter.com"):
             tokens[i] = tokens[i].replace("twitter.com", "fxtwitter.com");
             break;
           case tokens[i].includes("instagram.com"):
@@ -68,8 +68,25 @@ async function HandleMSG(msg) {
 
   const NewMSG = await AdjustMSGLink(msg.content);
   if (NewMSG != msg.content) {
-    await msg.channel.send(`<@${msg.author.id}> SENT:\n` + NewMSG);
-    await msg.delete();
+    try {
+      // Fetch or create a webhook
+
+      let webhook = await msg.channel.createWebhook({
+        name: "Fix Link Embed",
+        avatar: c.user.displayAvatarURL(),
+      });
+
+      // Send the replacement message using the webhook
+      await webhook.send({
+        content: NewMSG,
+        username: msg.author.username,
+        avatarURL: msg.author.displayAvatarURL(),
+      });
+      console.log(webhook);
+      await msg.delete();
+    } catch (error) {
+      console.error("Error replacing message:", error);
+    }
   }
 }
 
