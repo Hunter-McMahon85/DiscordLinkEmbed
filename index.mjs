@@ -85,7 +85,7 @@ async function HandleMSG(msg) {
         username: msg.author.username,
         avatarURL: msg.author.displayAvatarURL(),
       });
-      console.log(webhook);
+      
       await msg.delete();
     } catch (error) {
       console.error("Error replacing message:", error);
