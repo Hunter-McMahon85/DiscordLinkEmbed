@@ -26,6 +26,14 @@ function isValidURL(url) {
   }
 }
 
+const links = {
+  "x.com": "fxtwitter.com",
+  "twitter.com": "fxtwitter.com",
+  "www.instagram.com": "ddinstagram.com",
+  "www.tiktok.com": "www.vxtiktok.com",
+  "www.reddit.com": "www.rxddit.com",
+};
+
 function AdjustMSGLink(inputMSG) {
   return new Promise((resolve) => {
     // find the link and url in the message Tokenize and search
@@ -34,8 +42,26 @@ function AdjustMSGLink(inputMSG) {
     // replace the link with its approprate social media service
     for (let i = 0; i < tokens.length; i++) {
       if (!isValidURL(tokens[i])) continue;
+      let subtokens = tokens[i].split("/");
+      console.log(subtokens)
 
-      switch (true) {
+      for (let j = 0; j < subtokens.length; j++) {
+        if (!(subtokens[j] in links)) continue;
+        console.log(subtokens[j])
+        tokens[i] = tokens[i].replace(subtokens[j], links[subtokens[j]]);
+      }
+    }
+
+    // reconstruct the message
+    const NewMSG = tokens.join(" ");
+
+    // return
+    resolve(NewMSG);
+  });
+}
+
+/*
+switch (true) {
         case tokens[i].includes("/x.com"):
           tokens[i] = tokens[i].replace("x.com", "fxtwitter.com");
           break;
@@ -52,17 +78,7 @@ function AdjustMSGLink(inputMSG) {
           tokens[i] = tokens[i].replace("reddit.com", "rxddit.com");
           break;
         default:
-          break;
-      }
-    }
-
-    // reconstruct the message
-    const NewMSG = tokens.join(" ");
-
-    // return
-    resolve(NewMSG);
-  });
-}
+          break;*/
 
 async function HandleMSG(msg) {
   // ensure the message is from a human and has an embed
@@ -85,8 +101,9 @@ async function HandleMSG(msg) {
         username: msg.author.username,
         avatarURL: msg.author.displayAvatarURL(),
       });
-      
+
       await msg.delete();
+      await webhook.delete();
     } catch (error) {
       console.error("Error replacing message:", error);
     }
@@ -97,10 +114,12 @@ async function HandleMSG(msg) {
 c.on("messageCreate", async (msg) => {
   // for messages sent with an embded
   HandleMSG(msg);
+  console.log("msg")
 });
 
 c.on("messageUpdate", async (oldMessage, newMessage) => {
   // for messages sent with an link that embed after send
   // discord secretly "edits" these messages so they show to listeners as an update
   HandleMSG(newMessage);
+  console.log("msg")
 });
