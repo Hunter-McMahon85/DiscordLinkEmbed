@@ -33,24 +33,26 @@ function AdjustMSGLink(inputMSG) {
 
     // replace the link with its approprate social media service
     for (let i = 0; i < tokens.length; i++) {
-      if (isValidURL(tokens[i])) {
-        switch (true) {
-          case tokens[i].includes("x.com"):
-            tokens[i] = tokens[i].replace("x.com", "fxtwitter.com");
-            break;
-          case tokens[i].includes("twitter.com") &
-            !tokens[i].includes("xtwitter.com"):
-            tokens[i] = tokens[i].replace("twitter.com", "fxtwitter.com");
-            break;
-          case tokens[i].includes("instagram.com"):
-            tokens[i] = tokens[i].replace("instagram.com", "ddinstagram.com");
-            break;
-          case tokens[i].includes("tiktok.com"):
-            tokens[i] = tokens[i].replace("tiktok.com", "vxtiktok.com");
-            break;
-          default:
-            break;
-        }
+      if (!isValidURL(tokens[i])) continue;
+
+      switch (true) {
+        case tokens[i].includes("/x.com"):
+          tokens[i] = tokens[i].replace("x.com", "fxtwitter.com");
+          break;
+        case tokens[i].includes("/twitter.com"):
+          tokens[i] = tokens[i].replace("twitter.com", "fxtwitter.com");
+          break;
+        case tokens[i].includes("/instagram.com"):
+          tokens[i] = tokens[i].replace("instagram.com", "ddinstagram.com");
+          break;
+        case tokens[i].includes("/tiktok.com"):
+          tokens[i] = tokens[i].replace("tiktok.com", "vxtiktok.com");
+          break;
+        case tokens[i].includes("/reddit.com"):
+          tokens[i] = tokens[i].replace("reddit.com", "rxddit.com");
+          break;
+        default:
+          break;
       }
     }
 
