@@ -60,26 +60,6 @@ function AdjustMSGLink(inputMSG) {
   });
 }
 
-/*
-switch (true) {
-        case tokens[i].includes("/x.com"):
-          tokens[i] = tokens[i].replace("x.com", "fxtwitter.com");
-          break;
-        case tokens[i].includes("/twitter.com"):
-          tokens[i] = tokens[i].replace("twitter.com", "fxtwitter.com");
-          break;
-        case tokens[i].includes("/instagram.com"):
-          tokens[i] = tokens[i].replace("instagram.com", "ddinstagram.com");
-          break;
-        case tokens[i].includes("/tiktok.com"):
-          tokens[i] = tokens[i].replace("tiktok.com", "vxtiktok.com");
-          break;
-        case tokens[i].includes("/reddit.com"):
-          tokens[i] = tokens[i].replace("reddit.com", "rxddit.com");
-          break;
-        default:
-          break;*/
-
 async function HandleMSG(msg) {
   // ensure the message is from a human and has an embed
   if (msg.author.bot) return;
