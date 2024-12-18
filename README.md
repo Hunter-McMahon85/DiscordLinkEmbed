@@ -4,13 +4,14 @@ Invite to your Server: https://discord.com/oauth2/authorize?client_id=1315920802
 
 
 This bot replaces the following social media links:
+
 twitter: fxtwitter.com
 
 instagram: ddinstagram.com
 
-tiktok: www.vxtiktok.com
+tiktok: vxtiktok.com
 
-reddit: www.rxddit.com
+reddit: rxddit.com
 
 
 Privacy policy:
