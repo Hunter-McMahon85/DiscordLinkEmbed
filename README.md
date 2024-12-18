@@ -5,8 +5,11 @@ Invite to your Server: https://discord.com/oauth2/authorize?client_id=1315920802
 
 This bot replaces the following social media links:
 twitter: fxtwitter.com
+
 instagram: ddinstagram.com
+
 tiktok: www.vxtiktok.com
+
 reddit: www.rxddit.com
 
 
