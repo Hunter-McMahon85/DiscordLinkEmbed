@@ -10,6 +10,7 @@ const c = new Client({
     GatewayIntentBits.GuildMembers,
     GatewayIntentBits.MessageContent,
     GatewayIntentBits.GuildIntegrations,
+    GatewayIntentBits.GuildMessageReactions
   ],
 });
 
@@ -43,11 +44,9 @@ function AdjustMSGLink(inputMSG) {
     for (let i = 0; i < tokens.length; i++) {
       if (!isValidURL(tokens[i])) continue;
       let subtokens = tokens[i].split("/");
-      console.log(subtokens)
 
       for (let j = 0; j < subtokens.length; j++) {
         if (!(subtokens[j] in links)) continue;
-        console.log(subtokens[j])
         tokens[i] = tokens[i].replace(subtokens[j], links[subtokens[j]]);
       }
     }
@@ -82,6 +81,7 @@ async function HandleMSG(msg) {
         avatarURL: msg.author.displayAvatarURL(),
       });
 
+      await webhook.react('❌');
       await msg.delete();
       await webhook.delete();
     } catch (error) {
@@ -92,14 +92,19 @@ async function HandleMSG(msg) {
 
 // Event listeners to trigger our bot logic
 c.on("messageCreate", async (msg) => {
-  // for messages sent with an embded
+  // for messages sent
   HandleMSG(msg);
-  console.log("msg")
 });
 
 c.on("messageUpdate", async (oldMessage, newMessage) => {
-  // for messages sent with an link that embed after send
-  // discord secretly "edits" these messages so they show to listeners as an update
+  // for messages sent with an link that embeds after send
+  // discord secretly "edits" these messages so the client sees these as "edited"/"updated messages"
   HandleMSG(newMessage);
-  console.log("msg")
+});
+
+c.on("messageReactionAdd", async (msg) => {
+  // this will be how users can delete their own messages forwarded by the bot
+  console.log(msg)
+
+  // todo: implement
 });
