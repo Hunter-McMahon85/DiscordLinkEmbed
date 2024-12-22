@@ -1,7 +1,8 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import { Client, GatewayIntentBits, WebhookClient } from "discord.js";
+import pkg from "discord.js";
+const { Client, GatewayIntentBits, EmbedBuilder } = pkg;
 
 const c = new Client({
   intents: [
@@ -10,7 +11,7 @@ const c = new Client({
     GatewayIntentBits.GuildMembers,
     GatewayIntentBits.MessageContent,
     GatewayIntentBits.GuildIntegrations,
-    GatewayIntentBits.GuildMessageReactions
+    GatewayIntentBits.GuildMessageReactions,
   ],
 });
 
@@ -67,21 +68,21 @@ async function HandleMSG(msg) {
   const NewMSG = await AdjustMSGLink(msg.content);
   if (NewMSG != msg.content) {
     try {
-      // Fetch or create a webhook
+      // create webhook
 
       let webhook = await msg.channel.createWebhook({
-        name: "Fix Link Embed",
+        name: `${msg.author.id} Forwarded by Link Embed Fixer `,
         avatar: c.user.displayAvatarURL(),
       });
 
       // Send the replacement message using the webhook
-      await webhook.send({
+      const reply = await webhook.send({
         content: NewMSG,
         username: msg.author.username,
         avatarURL: msg.author.displayAvatarURL(),
       });
 
-      await webhook.react('❌');
+      await reply.react("❌");
       await msg.delete();
       await webhook.delete();
     } catch (error) {
@@ -102,9 +103,18 @@ c.on("messageUpdate", async (oldMessage, newMessage) => {
   HandleMSG(newMessage);
 });
 
-c.on("messageReactionAdd", async (msg) => {
+c.on("messageReactionAdd", async (reaction, user) => {
   // this will be how users can delete their own messages forwarded by the bot
-  console.log(msg)
+  try {
+    if (user.bot) return;
+    // Fetch the full reaction message if it's partial (for cached message support)
+    if (reaction.message.partial) await reaction.message.fetch();
+    const OGSenderId = parseInt(reaction.message.embeds[0]?.description?.text);
 
-  // todo: implement
+    if (user.id === OGSenderId) {
+      console.log(`${user.tag} reacted to their forwarded message.`);
+    }
+  } catch (error) {
+    console.error("Error handling reaction:", error);
+  }
 });
