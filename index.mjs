@@ -15,7 +15,7 @@ const c = new Client({
   ],
 });
 
-c.login(process.env.DISCORD_TOKEN);
+c.login(process.env.DISCORD_TOKEN)
 
 // actual logic
 function isValidURL(url) {
@@ -77,7 +77,7 @@ async function HandleMSG(msg) {
 
       // Send the replacement message using the webhook
       const reply = await webhook.send({
-        content: NewMSG,
+        content: "user: " + msg.author.id + "\nSends: " + NewMSG,
         username: msg.author.username,
         avatarURL: msg.author.displayAvatarURL(),
       });
@@ -109,10 +109,9 @@ c.on("messageReactionAdd", async (reaction, user) => {
     if (user.bot) return;
     // Fetch the full reaction message if it's partial (for cached message support)
     if (reaction.message.partial) await reaction.message.fetch();
-    const OGSenderId = parseInt(reaction.message.embeds[0]?.description?.text);
 
-    if (user.id === OGSenderId) {
-      console.log(`${user.tag} reacted to their forwarded message.`);
+    if (reaction.message.content.includes(user.id)) {
+      reaction.message.delete();
     }
   } catch (error) {
     console.error("Error handling reaction:", error);
